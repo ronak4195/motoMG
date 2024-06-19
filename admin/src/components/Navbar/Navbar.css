@@ -1,0 +1,7 @@
+.navbar{
+    display: flex;
+} 
+
+.navlogo, .navprofile{
+    height: 10vh;
+}
