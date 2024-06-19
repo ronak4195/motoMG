@@ -1,0 +1,30 @@
+.cart-sidebar{
+    min-height: 80vh;
+    background-color: rgb(255, 255, 255);
+}
+
+.cart-heading{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .cart-items{
+    display: grid;
+} */
+.cartProductImage{
+    width: 10vw;
+}
+
+.cartProductItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cartProductName{
+    width: 20vw;
+    justify-content: center;
+    display: grid;
+
+}
