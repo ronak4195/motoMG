@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from "react";
+import { Link} from "react-router-dom";
 import "./css/Cart.css";
 
 const initialState = {
@@ -75,8 +76,76 @@ const Cart = () => {
     fetchCartItems();
   }, []);
 
-  const handleQuantityChange = (index, newQuantity) => {
+  const handleQuantityChange = async (index, newQuantity) => {
+    const userString = localStorage.getItem('user');
+    const user = JSON.parse(userString);
+
+    // Update the quantity in the cart items
     dispatch({ type: 'CHANGE_QUANTITY', index, quantity: newQuantity });
+
+    // Update the cart data in user object
+    const updatedCartData = user.cartData.map((item, i) => 
+      i === index ? { ...item, quantity: newQuantity } : item
+    );
+    const updatedUser = { ...user, cartData: updatedCartData };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
+      try {
+        const response = await fetch(`http://localhost:4000/update-cart`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ cartData: updatedCartData })
+        });
+        if (!response.ok) {
+          throw new Error('Failed to update cart data');
+        }
+        console.log('Cart data updated successfully');
+      } catch (error) {
+        console.error('Error updating cart data:', error);
+      }
+    }
+  };
+
+  const clearCart = async() => {
+    const userString = localStorage.getItem('user');
+    const user = JSON.parse(userString);
+    dispatch({ type: 'CLEAR_CART' });
+    const updatedCartData = [];
+    const updatedUser = { ...user, cartData: updatedCartData };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
+      try {
+        const response = await fetch(`http://localhost:4000/update-cart`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ cartData: updatedCartData })
+        });
+        if (!response.ok) {
+          throw new Error('Failed to update cart data');
+        }
+        console.log('Cart data updated successfully');
+      } catch (error) {
+        console.error('Error updating cart data:', error);
+      }
+    }
+  };
+
+  const checkout = () => {
+    if (state.total > 0) {
+      alert(`Total: ₹${state.total.toFixed(2)} - Thank you for your purchase!`);
+      clearCart();
+    } else {
+      alert("Your cart is empty. Please add items to proceed.");
+    }
   };
 
   const removeItem = async (index) => {
@@ -107,19 +176,6 @@ const Cart = () => {
     }
   };
 
-  const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
-  };
-
-  const checkout = () => {
-    if (state.total > 0) {
-      alert(`Total: ₹${state.total.toFixed(2)} - Thank you for your purchase!`);
-      clearCart();
-    } else {
-      alert("Your cart is empty. Please add items to proceed.");
-    }
-  };
-
   return (
     <div className="cart-sidebar">
       <div className="cart-heading">
@@ -134,9 +190,9 @@ const Cart = () => {
             <div className="cartProductName">{item.name}</div>
             <div className="cartProductPrice">₹{item.price}</div>
             <div className="cartProductQuantity">
-              <button onClick={() => handleQuantityChange(index, Math.max(1, item.quantity - 1))}>-</button>
+              <button onClick={() => handleQuantityChange(index, Math.max(1, item.quantity - 1))} className="changeQuantityBtn">-</button>
               <span>{item.quantity}</span>
-              <button onClick={() => handleQuantityChange(index, item.quantity + 1)}>+</button>
+              <button onClick={() => handleQuantityChange(index, item.quantity + 1)} className="changeQuantityBtn">+</button>
             </div>
             <button className="removeButton" onClick={() => removeItem(index)}>Remove</button>
           </li>
@@ -152,7 +208,7 @@ const Cart = () => {
           Clear Cart
         </button>
         <button className="btn clear-cart checkout" onClick={checkout}>
-          Proceed
+          <Link to = "/checkout" className="checkout-text">Check Out</Link>
         </button>
       </div>
     </div>

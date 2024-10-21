@@ -8,7 +8,7 @@ import path from 'path';
 import jwt from 'jsonwebtoken';
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 app.use(express.json());
 app.use(cors());
@@ -17,7 +17,7 @@ const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
   console.error('MONGO_URI environment variable is not set.');
-  process.exit(1); // Exit the application if the MONGO_URI is not set
+  process.exit(1); 
 }
 
 mongoose.connect(mongoURI)
@@ -130,16 +130,29 @@ app.get('/allproducts', async (req, res) => {
 const Users = mongoose.model('Users', {
   name: {
     type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 100,
   },
   email: {
     type: String,
+    required: true,
     unique: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+    unique: true,
+    minlength: 10,
   },
   vehicle: {
     type: String,
+    maxlength: 50,
   },
   password: {
     type: String,
+    required: true,
+    minlength: 6,
   },
   cartData: [{
     id: {
@@ -168,6 +181,21 @@ const Users = mongoose.model('Users', {
       default: 1,
     }
   }],
+  address1:{
+    type: String,
+  },
+  address2:{
+    type: String,
+  },
+  city:{
+    type: String,
+  },
+  pincode:{
+    type: Number,
+  },
+  state:{
+    type:String,
+  },
   date: {
     type: Date,
     default: Date.now,
@@ -203,19 +231,22 @@ app.post('/signup', async (req, res) => {
   const user = new Users({
     name: req.body.name,
     email: req.body.email,
+    phone: req.body.phone,
     password: req.body.password,
     vehicle: req.body.vehicle,
     cartData: [],
+    city: req.body.city,
+    state: req.body.state,
+    address1: req.body.address1,
+    address2: req.body.address2,
+    pincode: req.body.pincode,
   });
-
   await user.save();
-
   const data = {
     user: {
       id: user.id
     }
   };
-
   const token = jwt.sign(data, 'secret_ecom');
   const username = user.name;
   const userId = user.id;
@@ -261,7 +292,6 @@ app.put('/update-cart', authenticateToken, async (req, res) => {
   const { cartData } = req.body;
 
   try {
-    // Update the user's cartData in MongoDB
     const updatedUser = await Users.findByIdAndUpdate(
       userId,
       { cartData },

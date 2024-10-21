@@ -1,0 +1,37 @@
+.labelCheckout{
+    color: #f80000;
+}
+
+.inputCheckout{
+    height: 30px;
+}
+
+.updateDetails-form{
+    display: grid;
+    justify-content: center;
+    padding: 10px 15px;
+    height: 80vh;
+}
+
+.cheackOutFormGroup {
+    max-width: 1000px;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.checkOutbtn{
+    border: "3px solid black";
+    border-radius: "7px";
+    align-items: center;
+    justify-content: center;
+}
+
+.checkOut{
+    width: 100%;
+    padding: 5px 0;
+    background-color: #f80000;
+    color: white;
+    border-radius: 15px;
+}

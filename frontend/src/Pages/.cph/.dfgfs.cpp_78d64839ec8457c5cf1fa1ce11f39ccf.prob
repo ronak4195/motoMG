@@ -1,0 +1,1 @@
+{"name":"Local: dfgfs","url":"c:\\Users\\4195r\\Documents\\motoMG\\motoMG\\frontend\\src\\Pages\\dfgfs.cpp","tests":[{"id":1723123375179,"input":"1\n4\n2 2 2 2\n2\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\4195r\\Documents\\motoMG\\motoMG\\frontend\\src\\Pages\\dfgfs.cpp","group":"local","local":true}

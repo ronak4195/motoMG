@@ -1,8 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Item = (props) => {
   const { id, image, name, price, mrp } = props;
-
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/products?id=${props.id}`);
+  };
   const handleAddToCart = async () => {
     const authToken = localStorage.getItem('auth-token');
     const userString = localStorage.getItem('user');
@@ -53,6 +57,7 @@ export const Item = (props) => {
           src={image}
           className="product-image"
           alt={name}
+          onClick={handleClick}
         />
       </a>
       <div className="product-description">

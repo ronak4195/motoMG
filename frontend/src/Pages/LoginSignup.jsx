@@ -7,6 +7,7 @@ function LoginSignup() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     vehicle: "",
     password: "",
   });
@@ -58,7 +59,14 @@ function LoginSignup() {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          address1: "",
+          address2: "",
+          city: "",
+          state: "",
+          pincode: ""
+      }),
       });
       responseData = await response.json();
       if (responseData.success) {
@@ -110,6 +118,19 @@ function LoginSignup() {
               required
             />
           </div>
+          {state === "SignUp" && (
+          <div className="form-group">
+            <label htmlFor="phone">Phone Number:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          )}
           {state === "SignUp" && (
             <div className="form-group">
               <label htmlFor="vehicle">Which bike do you own?:</label>

@@ -1,0 +1,72 @@
+.inputBar {
+  padding: 0 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.name {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+.message {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.sendButton {
+  width: 100%;
+  height: 100%;
+  padding: 10px 0;
+}
+
+.button {
+  width: 100%;
+  padding: 8px 0;
+  background-color: #f80000;
+  color: white;
+  border-radius: 10px;
+}
+
+.contactCard {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.contactPage {
+  min-height: 90vh;
+}
+
+.contactForm {
+  display: grid;
+  min-width: 50vw;
+  padding: 10px;
+}
+
+.contactDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.contactHeading {
+  display: grid;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.resultBar {
+  color: white;
+  display: grid;
+  justify-content: center;
+  align-items: start;
+}
+
+@media screen and (max-width: 880px), screen and (max-height: 700px) {
+  .contactPage {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobileNumber, .emailId{
+    font-size: 90%;
+  }
+}

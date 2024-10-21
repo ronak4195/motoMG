@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../Assets/gearPITblackwobg.png";
 import burgerIcon from "../Assets/icon/burgerred.png";
 import closeIcon from "../Assets/icon/closered.png";
 import shoppingBagIcon from "../Assets/icon/shoppingbagred.png";
 import shoppingBagIconWhite from "../Assets/icon/shoppingBagIconWhite.png";
 import Burger from "../Burger/Burger";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
   const [menu, setMenu] = useState("HOME");
@@ -14,14 +15,14 @@ export const Navbar = () => {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const name = localStorage.getItem('user-first-name');
+    const name = localStorage.getItem("user-first-name");
     if (name) {
       setUserName(name);
     } else {
       setUserName("Hello");
     }
   }, []);
-  
+
   const handleClick = () => {
     setIsBurgerIcon(!isBurgerIcon);
     setDisplayBurg(!displayBurg);
@@ -32,11 +33,24 @@ export const Navbar = () => {
     setDisplayBurg(false);
   };
 
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (inputValue.trim()) {
+      navigate(`/product?name=${inputValue}`);
+    }
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('auth-token');
-    localStorage.removeItem('user-first-name');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('user');
+    localStorage.removeItem("auth-token");
+    localStorage.removeItem("user-first-name");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
     setUserName("");
   };
 
@@ -53,7 +67,15 @@ export const Navbar = () => {
                 className="header-icon-image"
               />
             </nav>
-            <img src={logo} alt="gearPIT" className="logo-image" />
+            <img
+              src={logo}
+              alt="gearPIT"
+              className="logo-image"
+              onClick={() => {
+                setMenu("HOME");
+                navigate("/");
+              }}
+            />
             <div id="header-content">
               <li>
                 <Link
@@ -103,30 +125,40 @@ export const Navbar = () => {
             </div>
             <div className="header-secondary-link">
               <div className="header-icon-list">
+                <div className="searchBar">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    className="search"
+                  />
+                  <button className="searchSubmit" onClick={handleSubmit}>
+                    Submit
+                  </button>
+                </div>
+
                 <div className="loginNavbar">
-                  {localStorage.getItem('auth-token') ? (
+                  {localStorage.getItem("auth-token") ? (
                     <div className="loginNavbarButton" onClick={handleLogout}>
                       {userName}
                     </div>
                   ) : (
-                    <Link to="/login" onClick={() => setMenu("profile")}>
-                      <div className="loginNavbarButton">
-                        LogIn
-                      </div>
+                    <Link to="/login" onClick={() => setMenu("profile")} style={{ textDecoration: 'none' }}>
+                      <div className="loginNavbarButton">LogIn</div>
                     </Link>
                   )}
                 </div>
                 <div className="cart">
                   <Link to="/cart" onClick={() => setMenu("cart")}>
                     <img
-                      src={menu === "cart" ? shoppingBagIconWhite : shoppingBagIcon}
+                      src={
+                        menu === "cart" ? shoppingBagIconWhite : shoppingBagIcon
+                      }
                       alt=""
                       className="header-icon-image"
                     />
                   </Link>
-                  <div className="number-of-items">
-                    <span className="noi">0</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -134,6 +166,18 @@ export const Navbar = () => {
         </div>
       </div>
       <Burger displayBurg={displayBurg} closeBurger={closeBurger} />
+      <div className="searchBarMobile">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={inputValue}
+          onChange={handleInputChange}
+          className="searchMobile"
+        />
+        <button className="searchSubmitMobile" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
     </>
   );
 };

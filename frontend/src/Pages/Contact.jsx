@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./css/Contact.css";
 
 export default function Contact() {
   const [result, setResult] = useState("");
@@ -28,18 +29,8 @@ export default function Contact() {
   return (
     <div className="contactPage">
       <div className="mapAndForm">
-        <div className="mapContainer">
-          <iframe
-            className="map"
-            title="location-map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1694183799445!2d144.964873715321!3d-37.814217979751604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b1b9b2abf07!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618970694797!5m2!1sen!2sau"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-          ></iframe>
-        </div>
         <div className="contactForm">
-          <h6 className="contactHeading">Reach out to us!</h6>
+          <h2 className="contactHeading">Reach out to us!</h2>
           <form onSubmit={onSubmit} className="contactCard">
             <input
               className="name inputBar"
@@ -65,7 +56,18 @@ export default function Contact() {
               <button className="button">Send Message</button>
             </div>
           </form>
-          <span>{result}</span>
+          <span className="resultBar">{result}</span>
+        </div>
+        <div className="mapContainer">
+          <iframe
+            className="map"
+            title="location-map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d223.79161093737557!2d91.7370783091098!3d26.17501228146135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5b7e423f55f3%3A0x641285ab5ebea8fc!2smotoMG!5e0!3m2!1sen!2sin!4v1718796020983!5m2!1sen!2sin"
+            //src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1694183799445!2d144.964873715321!3d-37.814217979751604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577b1b9b2abf07!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1618970694797!5m2!1sen!2sau"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
       <div className="contactDetails">
