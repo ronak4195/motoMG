@@ -1,13 +1,14 @@
 import React from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Admin from './pages/admin/Admin'
+import { AppProvider } from "./Context/Context";
 
 const App = () => {
   return (
-    <div>
+    <AppProvider>
       <Navbar />
       <Admin/>
-    </div>
+    </AppProvider>
   )
 }
 

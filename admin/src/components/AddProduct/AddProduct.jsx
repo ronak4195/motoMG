@@ -4,6 +4,7 @@ import add from '../../assets/uploadImage.svg'
 
 const AddProduct = () => {
     const [image,setImage] = useState(false);
+    const { baseURL } = useAppContext(); 
     const[productDetails, setProductDetails] = useState({
         name:"",
         image:"",
@@ -25,7 +26,7 @@ const AddProduct = () => {
         let formData = new FormData();
         formData.append('product', image);
 
-        await fetch('http://localhost:4000/upload', {
+        await fetch(`${baseURL}/upload`, {
             method:'Post',
             headers:{
                 Accept:'application/json',
@@ -36,7 +37,7 @@ const AddProduct = () => {
         if(responsedata.success){
             product.image = responsedata.image_url;
             console.log(product);
-            await fetch('http://localhost:4000/addproduct',{
+            await fetch(`${baseURL}/addproduct`,{
                 method:'Post',
                 headers:{
                     Accept:'application/json',
