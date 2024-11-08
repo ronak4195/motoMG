@@ -6,9 +6,12 @@ export const Item = (props) => {
   const { baseURL } = useAppContext(); 
   const { id, image, name, price, mrp } = props;
   const navigate = useNavigate();
+  //const fallbackImage = "../Assets/img/motorcycleoffroad.jpg";
+
   const handleClick = () => {
     navigate(`/products?id=${props.id}`);
   };
+
   const handleAddToCart = async () => {
     const authToken = localStorage.getItem('auth-token');
     const userString = localStorage.getItem('user');
@@ -27,11 +30,10 @@ export const Item = (props) => {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${authToken}`
+              'Authorization': `Bearer ${authToken}`,
             },
-            body: JSON.stringify({ userId: user.id, cartData: user.cartData })
+            body: JSON.stringify({ userId: user.id, cartData: user.cartData }),
           });
-
           if (response.ok) {
             console.log('Cart data updated in MongoDB successfully');
             localStorage.setItem('user', JSON.stringify(user));
@@ -49,19 +51,24 @@ export const Item = (props) => {
       }
     } else {
       alert('Please login to add items to cart');
+      navigate('/login');
     }
   };
 
+  // const handleImageError = (e) => {
+  //   e.target.src = fallbackImage; 
+  // };
   return (
     <div className="product-card">
-      <a href>
-        <img
-          src={image}
-          className="product-image"
-          alt={name}
-          onClick={handleClick}
-        />
-      </a>
+      <img
+        src={image 
+          // || fallbackImage
+        }
+        className="product-image"
+        alt={name}
+        onClick={handleClick}
+        // onError={handleImageError} 
+      />
       <div className="product-description">
         <span>{name}</span>
         <h5>Premium Gears</h5>
