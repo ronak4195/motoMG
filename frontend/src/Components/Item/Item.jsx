@@ -6,7 +6,7 @@ export const Item = (props) => {
   const { baseURL } = useAppContext(); 
   const { id, image, name, price, mrp } = props;
   const navigate = useNavigate();
-  //const fallbackImage = "../Assets/img/motorcycleoffroad.jpg";
+  const fallbackImage = "../Assets/img/motorcycleoffroad.jpg";
 
   const handleClick = () => {
     navigate(`/products?id=${props.id}`);
@@ -55,19 +55,17 @@ export const Item = (props) => {
     }
   };
 
-  // const handleImageError = (e) => {
-  //   e.target.src = fallbackImage; 
-  // };
+  const handleImageError = (e) => {
+    e.target.src = fallbackImage; 
+  };
   return (
     <div className="product-card">
       <img
-        src={image 
-          // || fallbackImage
-        }
+        src={image || fallbackImage}
         className="product-image"
         alt={name}
         onClick={handleClick}
-        // onError={handleImageError} 
+        onError={handleImageError} 
       />
       <div className="product-description">
         <span>{name}</span>
