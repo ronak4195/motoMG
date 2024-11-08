@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import './AddProduct.css'
 import add from '../../assets/uploadImage.svg'
+import { useAppContext } from '../../Context/Context';
 
 const AddProduct = () => {
     const [image,setImage] = useState(false);
