@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../Context/Context";
 
 export const Item = (props) => {
+  const { baseURL } = useAppContext(); 
   const { id, image, name, price, mrp } = props;
   const navigate = useNavigate();
   const handleClick = () => {
@@ -21,7 +23,7 @@ export const Item = (props) => {
             const newCartItem = { id, image, name, price, quantity: 1 };
             user.cartData.push(newCartItem);
           }
-          const response = await fetch('http://localhost:4000/update-cart', {
+          const response = await fetch(`${baseURL}/update-cart`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
