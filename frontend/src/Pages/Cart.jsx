@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Link} from "react-router-dom";
 import "./css/Cart.css";
+import { useAppContext } from "../Context/Context";
 
 const initialState = {
   cartItems: [],
@@ -51,6 +52,7 @@ function cartReducer(state, action) {
 
 const Cart = () => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
+  const { baseURL } = useAppContext();
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -93,7 +95,8 @@ const Cart = () => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
-        const response = await fetch(`http://localhost:4000/update-cart`, {
+        const response = await fetch(`${baseURL}/update-cart`, {
+          // const response = await fetch(`${BASE_URL}/update-cart`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -121,7 +124,7 @@ const Cart = () => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
-        const response = await fetch(`http://localhost:4000/update-cart`, {
+        const response = await fetch(`${baseURL}/update-cart`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -158,7 +161,7 @@ const Cart = () => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
-        const response = await fetch(`http://localhost:4000/update-cart`, {
+        const response = await fetch(`${baseURL}/update-cart`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

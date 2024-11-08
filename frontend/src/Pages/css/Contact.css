@@ -1,6 +1,6 @@
-.inputBar {
+.name, .email , .message {
   padding: 0 10px;
-  width: 100%;
+  width: 40vw;
   height: 100%;
 }
 
@@ -13,7 +13,7 @@
   border-bottom-left-radius: 10px;
 }
 .sendButton {
-  width: 100%;
+  width: 40vw;
   height: 100%;
   padding: 10px 0;
 }
@@ -61,6 +61,21 @@
   align-items: start;
 }
 
+.mapAndForm{
+  display: flex;
+}
+.mapContainer{
+  width: 50vw;
+  min-height: 80vh;
+  justify-content: center;
+  align-items: center;
+  display: grid;
+}
+.map{
+  width: 100%;
+  height: 80%;
+}
+
 @media screen and (max-width: 880px), screen and (max-height: 700px) {
   .contactPage {
     display: flex;
@@ -68,5 +83,25 @@
   }
   .mobileNumber, .emailId{
     font-size: 90%;
+  }
+  .mapContainer{
+    width: 100vw;
+  }
+  .mapAndForm{
+    flex-direction: column;
+  }
+  .inputBar{
+    width: 50vw;
+    max-width: 1000px;
+  }
+  .name , .email {
+    height: 35px;
+  }
+  .message {
+    height: 100px;
+  }
+  .map {
+    width: 80vw;
+    height: 50vh;
   }
 }

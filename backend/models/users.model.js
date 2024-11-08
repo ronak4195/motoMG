@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const Users = mongoose.model('Users', {
+    userID: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
@@ -75,4 +80,4 @@ const Users = mongoose.model('Users', {
     }
   });
   
-  export default Users;
+export default Users;

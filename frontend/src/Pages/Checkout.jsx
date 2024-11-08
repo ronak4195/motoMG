@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
 import { Link} from "react-router-dom"
 import "./css/Checkout.css"
+import { useAppContext } from '../Context/Context';
 
 export const Checkout = () => {
+  const { baseURL } = useAppContext();
   const [formData, setFormData] = useState({
     address1: "",
     address2: "",
@@ -23,7 +25,7 @@ export const Checkout = () => {
     console.log("updateDetails Function executed", formData);
     let responseData;
     try {
-      const response = await fetch('http://localhost:4000/signup', {
+      const response = await fetch(`${baseURL}/signup`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -48,48 +50,6 @@ export const Checkout = () => {
       alert("Signup failed. Please try again.");
     }
   };
-
-
-  // const updateDetails = async () => {
-  //   console.log("updateDetails Function executed", formData);
-  //   let responseData;
-  //   try {
-  //     const response = await fetch('http://localhost:4000/signup', {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-  //     responseData = await response.json();
-  //     if (responseData.success) {
-  //       localStorage.setItem('auth-token', responseData.token);
-  //       localStorage.setItem('user-first-name', responseData.username); 
-  //       localStorage.setItem('userId', responseData.userId);
-  //       localStorage.setItem('user', JSON.stringify(responseData.user));
-  //       window.location.replace("/");
-  //     } else {
-  //       alert(responseData.errors);
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch", error);
-  //     alert("updateDetails failed. Please try again.");
-  //   }
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   updateDetails();
-  // };
-
-  // const handleSubmit = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]: value,
-  //   });
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -175,5 +135,3 @@ export const Checkout = () => {
 }
 
 export default Checkout;
-
-

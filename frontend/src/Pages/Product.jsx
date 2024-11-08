@@ -2,8 +2,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Item } from "../Components/Item/Item";
 import { useLocation } from "react-router-dom";
+import { useAppContext } from '../Context/Context';
 
 export default function Product() {
+  const { baseURL } = useAppContext();
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -12,16 +14,23 @@ export default function Product() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const productName = queryParams.get("name");
+  const productCategory = queryParams.get("category");
 
   const fetchProducts = useCallback(async (page = 1) => {
     try {
       const params = { page };
-      const response = await axios.get(
-        `http://localhost:4000/allproducts?name=${productName}`,
-        {
-          params,
-        }
-      );
+
+      // Build the dynamic URL based on query parameters
+      let url = `${baseURL}/allproducts?`;
+      if (productName) {
+        url += `name=${productName}&`;
+      }
+      if (productCategory) {
+        url += `category=${productCategory}&`;
+      }
+      url = url.slice(0, -1); // Remove the trailing "&" or "?" if needed
+
+      const response = await axios.get(url, { params });
       setProducts(response.data.products);
       setPagination({
         currentPage: page,
@@ -30,7 +39,7 @@ export default function Product() {
     } catch (error) {
       console.error("Error fetching products:", error);
     }
-  }, [productName]);
+  }, [baseURL, productName, productCategory]);
 
   useEffect(() => {
     fetchProducts();

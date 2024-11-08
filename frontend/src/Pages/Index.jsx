@@ -2,15 +2,17 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Item } from '../Components/Item/Item';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../Context/Context';
 
 export default function Index() {
+  const { baseURL } = useAppContext();
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1 });
 
   const fetchProducts = useCallback(async (page = 1) => {
     try {
       const params = {page} ;
-      const response = await axios.get('http://localhost:4000/allproducts', {
+      const response = await axios.get(`${baseURL}/allproducts`, {
         params,
       });
       setProducts(response.data.products);
@@ -19,7 +21,7 @@ export default function Index() {
       console.error('Error fetching products:', error);
     }
   }
-  ,[]
+  ,[baseURL]
 );
 
   useEffect(() => {

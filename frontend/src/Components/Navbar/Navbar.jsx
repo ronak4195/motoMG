@@ -17,11 +17,13 @@ export const Navbar = () => {
   useEffect(() => {
     const name = localStorage.getItem("user-first-name");
     if (name) {
-      setUserName(name);
+      const firstName = name.split(" ")[0]; 
+      setUserName(firstName);
     } else {
       setUserName("Hello");
     }
   }, []);
+  
 
   const handleClick = () => {
     setIsBurgerIcon(!isBurgerIcon);

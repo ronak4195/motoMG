@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import "./css/ProductByID.css"; // Create a CSS file for custom styles
+import { useAppContext } from '../Context/Context';
 
 export default function ProductByID() {
   const [product, setProduct] = useState(null);
@@ -9,10 +10,11 @@ export default function ProductByID() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const productID = queryParams.get("id");
+  const { baseURL } = useAppContext();
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/products/${productID}`);
+      const response = await axios.get(`${baseURL}/products/${productID}`);
       if (response.data.length > 0) {
         setProduct(response.data[0]);
       } else {
@@ -22,7 +24,7 @@ export default function ProductByID() {
       console.error("Error fetching product:", error);
       setError("Unable to fetch product details. Please try again later.");
     }
-  }, [productID]);
+  }, [baseURL, productID]);
 
   useEffect(() => {
     fetchProduct();
@@ -51,7 +53,7 @@ export default function ProductByID() {
             user.cartData.push(newCartItem);
           }
 
-          const response = await fetch("http://localhost:4000/update-cart", {
+          const response = await fetch(`${baseURL}/update-cart`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
