@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer } from "react";
-import { Link} from "react-router-dom";
+import React, { useEffect, useState, useReducer } from "react";
+import { Link } from "react-router-dom";
 import "./css/Cart.css";
 import { useAppContext } from "../Context/Context";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 const initialState = {
   cartItems: [],
@@ -10,40 +11,54 @@ const initialState = {
 
 function cartReducer(state, action) {
   switch (action.type) {
-    case 'SET_CART_ITEMS':
-      const newTotal = action.payload.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    case "SET_CART_ITEMS":
+      const newTotal = action.payload.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
       return {
         ...state,
         cartItems: action.payload,
         total: newTotal,
       };
-    case 'UPDATE_CART_TOTAL':
-      const updatedTotal = state.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    case "UPDATE_CART_TOTAL":
+      const updatedTotal = state.cartItems.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
       return {
         ...state,
         total: updatedTotal,
       };
-    case 'CLEAR_CART':
+    case "CLEAR_CART":
       return {
         ...state,
         cartItems: [],
         total: 0,
       };
-    case 'CHANGE_QUANTITY':
+    case "CHANGE_QUANTITY":
       const updatedCartItems = state.cartItems.map((item, index) =>
         index === action.index ? { ...item, quantity: action.quantity } : item
       );
       return {
         ...state,
         cartItems: updatedCartItems,
-        total: updatedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+        total: updatedCartItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        ),
       };
-    case 'REMOVE_ITEM':
-      const filteredCartItems = state.cartItems.filter((_, index) => index !== action.index);
+    case "REMOVE_ITEM":
+      const filteredCartItems = state.cartItems.filter(
+        (_, index) => index !== action.index
+      );
       return {
         ...state,
         cartItems: filteredCartItems,
-        total: filteredCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+        total: filteredCartItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        ),
       };
     default:
       return state;
@@ -53,9 +68,11 @@ function cartReducer(state, action) {
 const Cart = () => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const { baseURL } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchCartItems = async () => {
+      setIsLoading(true);
       const authToken = localStorage.getItem("auth-token");
       const userString = localStorage.getItem("user");
 
@@ -63,7 +80,8 @@ const Cart = () => {
         try {
           const user = JSON.parse(userString);
           if (Array.isArray(user.cartData)) {
-            dispatch({ type: 'SET_CART_ITEMS', payload: user.cartData });
+            dispatch({ type: "SET_CART_ITEMS", payload: user.cartData });
+            setIsLoading(false);
           } else {
             console.error("Cart data is not properly initialized");
           }
@@ -79,65 +97,65 @@ const Cart = () => {
   }, []);
 
   const handleQuantityChange = async (index, newQuantity) => {
-    const userString = localStorage.getItem('user');
+    const userString = localStorage.getItem("user");
     const user = JSON.parse(userString);
 
     // Update the quantity in the cart items
-    dispatch({ type: 'CHANGE_QUANTITY', index, quantity: newQuantity });
+    dispatch({ type: "CHANGE_QUANTITY", index, quantity: newQuantity });
 
     // Update the cart data in user object
-    const updatedCartData = user.cartData.map((item, i) => 
+    const updatedCartData = user.cartData.map((item, i) =>
       i === index ? { ...item, quantity: newQuantity } : item
     );
     const updatedUser = { ...user, cartData: updatedCartData };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
 
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
         const response = await fetch(`${baseURL}/update-cart`, {
           // const response = await fetch(`${BASE_URL}/update-cart`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify({ cartData: updatedCartData })
+          body: JSON.stringify({ cartData: updatedCartData }),
         });
         if (!response.ok) {
-          throw new Error('Failed to update cart data');
+          throw new Error("Failed to update cart data");
         }
-        console.log('Cart data updated successfully');
+        console.log("Cart data updated successfully");
       } catch (error) {
-        console.error('Error updating cart data:', error);
+        console.error("Error updating cart data:", error);
       }
     }
   };
 
-  const clearCart = async() => {
-    const userString = localStorage.getItem('user');
+  const clearCart = async () => {
+    const userString = localStorage.getItem("user");
     const user = JSON.parse(userString);
-    dispatch({ type: 'CLEAR_CART' });
+    dispatch({ type: "CLEAR_CART" });
     const updatedCartData = [];
     const updatedUser = { ...user, cartData: updatedCartData };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
         const response = await fetch(`${baseURL}/update-cart`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify({ cartData: updatedCartData })
+          body: JSON.stringify({ cartData: updatedCartData }),
         });
         if (!response.ok) {
-          throw new Error('Failed to update cart data');
+          throw new Error("Failed to update cart data");
         }
-        console.log('Cart data updated successfully');
+        console.log("Cart data updated successfully");
       } catch (error) {
-        console.error('Error updating cart data:', error);
+        console.error("Error updating cart data:", error);
       }
     }
   };
@@ -152,29 +170,29 @@ const Cart = () => {
   };
 
   const removeItem = async (index) => {
-    const userString = localStorage.getItem('user');
+    const userString = localStorage.getItem("user");
     const user = JSON.parse(userString);
-    dispatch({ type: 'REMOVE_ITEM', index });
+    dispatch({ type: "REMOVE_ITEM", index });
     const updatedCartData = user.cartData.filter((_, i) => i !== index);
     const updatedUser = { ...user, cartData: updatedCartData };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       try {
         const response = await fetch(`${baseURL}/update-cart`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify({ cartData: updatedCartData })
+          body: JSON.stringify({ cartData: updatedCartData }),
         });
         if (!response.ok) {
-          throw new Error('Failed to update cart data');
+          throw new Error("Failed to update cart data");
         }
-        console.log('Cart data updated successfully');
+        console.log("Cart data updated successfully");
       } catch (error) {
-        console.error('Error updating cart data:', error);
+        console.error("Error updating cart data:", error);
       }
     }
   };
@@ -186,34 +204,78 @@ const Cart = () => {
           <b>Your Cart</b>
         </h2>
       </div>
-      <ul className="cart-items">
-        {state.cartItems.map((item, index) => (
-          <li className="cartProductItem" key={index}>
-            <img className="cartProductImage" src={item.image} alt={item.name} />
-            <div className="cartProductName">{item.name}</div>
-            <div className="cartProductPrice">₹{item.price}</div>
-            <div className="cartProductQuantity">
-              <button onClick={() => handleQuantityChange(index, Math.max(1, item.quantity - 1))} className="changeQuantityBtn">-</button>
-              <span>{item.quantity}</span>
-              <button onClick={() => handleQuantityChange(index, item.quantity + 1)} className="changeQuantityBtn">+</button>
-            </div>
-            <button className="removeButton" onClick={() => removeItem(index)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-      <div className="total-sum">
-        <h3>
-          Your Total: ₹ <span className="cart-total">{state.total.toFixed(2)}</span>
-        </h3>
-      </div>
-      <div className="clear-cart">
-        <button className="btn clear-cart" onClick={clearCart}>
-          Clear Cart
-        </button>
-        <button className="btn clear-cart checkout" onClick={checkout}>
-          <Link to = "/checkout" className="checkout-text">Check Out</Link>
-        </button>
-      </div>
+      {isLoading ? (
+        <div style={{ display: "grid", justifyContent: "center" }}>
+          <PacmanLoader
+            style={{
+              margin: "70px auto",
+              borderColor: "black",
+              display: "block",
+            }}
+          />
+        </div>
+      ) : (
+        <>
+          <ul className="cart-items">
+            {state.cartItems.map((item, index) => (
+              <li className="cartProductItem" key={index}>
+                <img
+                  className="cartProductImage"
+                  src={item.image}
+                  alt={item.name}
+                />
+                <div className="cartProductName">{item.name}</div>
+                <div className="cartProductPrice">₹{item.price}</div>
+                <div className="cartProductQuantity">
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(
+                        index,
+                        Math.max(1, item.quantity - 1)
+                      )
+                    }
+                    className="changeQuantityBtn"
+                  >
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(index, item.quantity + 1)
+                    }
+                    className="changeQuantityBtn"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  className="removeButton"
+                  onClick={() => removeItem(index)}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="total-sum">
+            <h3>
+              Your Total: ₹{" "}
+              <span className="cart-total">{state.total.toFixed(2)}</span>
+            </h3>
+          </div>
+          <div className="clear-cart">
+            <button className="btn clear-cart" onClick={clearCart}>
+              Clear Cart
+            </button>
+            <button className="btn clear-cart checkout" onClick={checkout}>
+              <Link to="/checkout" className="checkout-text">
+                Check Out
+              </Link>
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
