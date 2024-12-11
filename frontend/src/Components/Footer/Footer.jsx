@@ -1,9 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import "./Footer.css"
 
 export default function Footer() {
   return (
-    <footer id="footer">
+    <footer id ="footerID">
+      <div id="footer">
         <div classname="footer-column">
           <h3>Store</h3>
           <Link to="/helmets">Helmets</Link><br />
@@ -15,6 +17,11 @@ export default function Footer() {
           <Link to="/">Shipping Policy</Link><br />
           <Link to="/">Refund/Exchange Policy</Link><br />
           <Link to="/">Accessories</Link><br />
+        </div>
+        </div>
+        <div className='footerRights'>
+          <h2>All Rights Reserved</h2>
+          <h3 className='footerBuilt'>Built by <a href="https://portfolio-phi-vert-46.vercel.app/" id='footerRonakJain'>Ronak Jain</a></h3>
         </div>
       </footer>
     );
